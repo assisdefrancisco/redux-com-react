@@ -1,4 +1,4 @@
-## EXPLORRANDO O REDUX
+## EXPLORANDO O REDUX
 * Store
 * State global(Estado Global)
 * Function reducer(Função reducer)
