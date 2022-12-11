@@ -9,7 +9,8 @@ function App({ contador, incrementar }) {
   return (
     <div>
       <h1>Total: {contador}</h1>
-      <button onClick={() => incrementar()}>Incrementar</button>
+      {/* <button onClick={() => incrementar()}>Incrementar</button> */}
+      <button onClick={incrementar}>Incrementar</button>
     </div>
   );
 }
