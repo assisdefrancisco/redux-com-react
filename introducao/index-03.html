@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reducer</title>
+    <script src="./immer.umd.production.min.js"></script>
+    <script src="./redux.min.js"></script>    
+</head>
+<body>
+    <div id="caixa" style="background: blue; height: 50px;">
+    </div>
+
+    <script>
+        // Teste
+        const obj1 = {
+            nome: 'André',
+            idade: 31
+        }
+
+        const obj2 = immer.produce(obj1, (draft) => {
+            draft.idade = 35
+        })
+
+        console.log(obj1);
+        console.log(obj2);
+
+        // const initialState = {
+        //     nome: 'André',         
+        //     idade: 31
+        // }
+        const initialState = {
+            nome: 'André',
+            sobre: {
+                dados: { 
+                    idade: 31 
+                }
+            }            
+        }
+
+        // Mutabilidade do objeto : Erro não usar dessa forma
+        // function reducer(state = initialState, action) {
+        //     switch(action.type) {
+        //         case 'MUDAR_NOME': 
+        //             state.nome = action.payload;
+        //             return state;
+        //         default:
+        //             return state;
+        //     }
+        // }
+
+        // Imutabilidade
+        // function reducer(state = initialState, action) {
+        //     switch(action.type) {
+        //         case 'MUDAR_NOME':
+        //             return { ...state, nome: action.payload };
+        //         default:
+        //             return state;
+        //     }
+        // }
+
+        // const reducer = immer.produce((state, action) => {
+        //     switch(action.type) {
+        //         case 'MUDAR_NOME':
+        //             state.nome = action.payload;
+        //             break;
+        //         case 'MUDAR_IDADE':
+        //             state.idade = action.payload;
+        //             break;
+        //     }
+        // }, initialState)
+
+        // const reducer = immer.produce((state, action) => {
+        //     switch(action.type) {
+        //         case 'MUDAR_NOME':
+        //             state.nome = action.payload;
+        //             break;
+        //         case 'MUDAR_IDADE':
+        //             state.sobre.dados.idade = action.payload;
+        //             break;
+        //     }
+        // }, initialState)
+
+
+        //sem immer
+        const reducer = (state = initialState, action) => {
+            switch(action.type) {
+                case 'MUDAR_NOME':
+                    return { ...state, nome: action.payload };
+                case 'MUDAR_IDADE':                    
+                    return { ...state, sobre: { ...state.sobre, dados: {...state.sobre.dados, idade: action.payload }} }
+                default:
+                    return state;
+            }
+        }
+
+        const store = Redux.createStore(
+            reducer,
+            window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+        );
+
+        store.dispatch({ type: 'MUDAR_NOME', payload: 'Maria'})
+        store.dispatch({ type: 'MUDAR_NOME', payload: 'João'})
+        store.dispatch({ type: 'MUDAR_NOME', payload: 'Pedro'})
+        store.dispatch({ type: 'MUDAR_IDADE', payload: 35})
+
+    </script>
+</body>
+</html>

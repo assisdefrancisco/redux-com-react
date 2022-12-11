@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux</title>
+    <script src="./redux.min.js"></script>
+</head>
+
+<body>
+
+    <div>
+        <h1>Total: <span id="total"></span></h1>
+        <button id="button">Incrementar</button>
+        <button id="button2">Reduzir</button>
+        <button id="abrir">Abrir</button>
+        <button id="fechar">Fechar</button>
+    </div>
+
+    <script>
+        // const initialStatte = {
+        //     nome: 'André',
+        //     id: 199
+        // };
+
+        // function reducer(state = initialStatte, action) {
+        //     return state;
+        // }
+
+        // Constantes
+        const INCREMENTAR = 'INCREMENTAR'
+        const SOMAR = 'SOMAR'
+        const REDUZIR = 'REDUZIR'
+
+        //Action Creator
+        function incrementar() {
+            return { type: INCREMENTAR };
+        }
+
+        function somar(payload) {
+            return { type: SOMAR, payload }
+        }
+
+        function reduzir() {
+            return { type: REDUZIR }
+        }
+
+        const initialStatte = 0
+
+        function contador(state = initialStatte, action) {
+            // if (action.type === SOMAR) {
+            //     return state + action.payload;
+            // } else if (action.type === INCREMENTAR) {
+            //     return state + 1;
+            // } else {
+            //     return state;
+            // }
+
+            switch(action.type) {
+                case INCREMENTAR:INCREMENTAR:
+                    return state + 1;
+                case REDUZIR: 
+                    return state - 1;
+                case SOMAR: 
+                    return state + action.payload;
+                default:
+                    return state;
+            }            
+        }
+
+        function modal(state = true, action) {
+            switch(action.type) {
+                case 'ABRIR':
+                    return true;
+                case 'FECHAR':
+                    return false;
+                default:
+                    return state;
+            }            
+        }
+
+        const reducer = Redux.combineReducers({ contador, modal });
+        const store = Redux.createStore(reducer);
+        // let state = store.getState();
+        // store.dispatch({ type: SOMAR, payload: 25 });
+
+        // store.dispatch(somar(25));                        
+        // store.dispatch(incrementar());
+
+        function render() {
+            const { contador, modal } = store.getState();
+            const total = document.getElementById('total');        
+            total.innerText = contador;
+            if(modal) 
+                total.style.display = 'inline-block'
+            else 
+                total.style.display = 'none' 
+        }   
+
+        render(); // renderizar a primeira vez
+
+        const unsubscribe = store.subscribe(render)
+        // store.dispatch(somar(25));
+        // unsubscribe();// cancelou o subscribe
+        
+        const button = document.getElementById('button')
+        button.addEventListener('click', () => store.dispatch(incrementar()));
+
+        const button2 = document.getElementById('button2')
+        button2.addEventListener('click', () => {
+            store.dispatch(reduzir())
+        })
+
+        const abrir = document.getElementById('abrir');
+        const fechar = document.getElementById('fechar');
+
+        abrir.addEventListener('click', () =>  store.dispatch({ type: 'ABRIR' }) );
+        fechar.addEventListener('click', () =>  store.dispatch({ type: 'FECHAR' }) );
+
+                
+    </script>
+</body>
+
+</html>
