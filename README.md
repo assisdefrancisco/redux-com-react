@@ -9,3 +9,4 @@
 * Estrutura de projeto com redux
 * Middleware (Função que é ativado entre dispatch e reducer)
 * Middleware Thunk  
+* Middleware com localstorage
