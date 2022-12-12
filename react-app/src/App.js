@@ -1,28 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { incrementar, reduzir } from './store/contador';
+import { abrir, fechar } from './store/modal';
 
-
-const incrementar = () => ({ type: 'INCREMENTAR' });
-
-function App({ contador, incrementar }) {
-
+function App() {
+  // const state = useSelector(state => state.contador);
+  const { contador, modal } = useSelector(state => state);
+  const dispatch = useDispatch();
+  
   return (
     <div>
-      <h1>Total: {contador}</h1>
-      {/* <button onClick={() => incrementar()}>Incrementar</button> */}
-      <button onClick={incrementar}>Incrementar</button>
+      {modal && <h1>Total: {contador}</h1>}
+      
+      <button onClick={() => dispatch(incrementar())}>Incrementar</button>
+      <button onClick={() => dispatch(reduzir())}>Reduzir</button>
+      <button onClick={() => dispatch(abrir())}>Abrir</button>
+      <button onClick={() => dispatch(fechar())}>Fechar</button>
     </div>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    contador: state
-  }
-}
-
-const mapDipatchToProps = {
-  incrementar
-}
-
-export default connect(mapStateToProps, mapDipatchToProps)(App);
+export default App;
